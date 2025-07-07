@@ -9,25 +9,18 @@ const Features = ({ transitions, symbols, start_state, end_states, states }) => 
     const checkDFAorNFA = async () => {
         setIsLoading(true);
         setError(null);
-        
-        // Log the data being sent
+
+        // Log only what you're actually sending
         console.log("Sending data:", {
             transitions,
-            symbols,
-            start_state,
-            end_states,
-            states
+            symbols
         });
 
         try {
             const response = await axios.post("http://localhost:5000/api/check-fa-type", {
                 transitions,
-                symbols,
-                start_state,
-                end_states,
-                states
+                symbols
             }, {
-                // Add timeout and headers
                 timeout: 5000,
                 headers: {
                     'Content-Type': 'application/json'
@@ -36,21 +29,22 @@ const Features = ({ transitions, symbols, start_state, end_states, states }) => 
 
             console.log("Response received:", response.data);
             setResult(response.data);
-            
         } catch (err) {
             console.error("Detailed error:", err);
-            
+
             if (err.code === 'ECONNREFUSED') {
                 setError('Cannot connect to server. Please ensure the backend is running.');
             } else if (err.code === 'ETIMEDOUT') {
                 setError('Request timed out. Please try again.');
             } else {
                 setError(`Failed to check FA type: ${err.message}`);
+                console.error("Detailed error:", err.response?.data || err.message);
             }
         } finally {
             setIsLoading(false);
         }
     };
+
 
     return (
         <div className="mt-7">

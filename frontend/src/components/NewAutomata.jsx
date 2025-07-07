@@ -188,14 +188,19 @@ export default function NewAutomata() {
                                 <td className="border p-2">{state}</td>
                                 {symbols.map(symbol => (
                                     <td key={`${state}-${symbol}`} className="border p-2">
-                                        <input
-                                            type="text"
-                                            value={transitions[state]?.[symbol]?.join(",") || ""}
-                                            onChange={(e) =>
-                                                handleTransitionChange(state, symbol, e.target.value)
-                                            }
-                                            className="w-full p-1 border rounded"
-                                            placeholder="e.g. q1,q2"
+                                        <MultipleSelection
+                                            options={states}
+                                            initialSelect={transitions[state]?.[symbol] || []}
+                                            handleEndStatesChange={(selected) => {
+                                                // Update transitions directly with array
+                                                setTransitions((prev) => ({
+                                                    ...prev,
+                                                    [state]: {
+                                                        ...prev[state],
+                                                        [symbol]: selected,
+                                                    },
+                                                }));
+                                            }}
                                         />
                                     </td>
                                 ))}
@@ -203,6 +208,12 @@ export default function NewAutomata() {
                         ))}
                     </tbody>
                 </table>
+                {/* Debug display */}
+                <div className="mt-4 p-2 bg-gray-100 rounded">
+                    <pre className="text-sm">
+                        {JSON.stringify(transitions, null, 2)}
+                    </pre>
+                </div>
             </div>
             <Features
                 transitions={transitions}
