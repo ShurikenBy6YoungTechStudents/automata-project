@@ -4,7 +4,7 @@ import { Search, Plus } from 'lucide-react';
 
 export default function FiniteAutomataList() {
     const [searchQuery, setSearchQuery] = useState('');
-    const [automataList, setAutomataList] = useState([]);
+    const [automataList, _setAutomataList] = useState([]);
     const navigate = useNavigate();
 
     const handleSearch = (e) => {

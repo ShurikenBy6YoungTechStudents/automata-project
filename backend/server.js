@@ -1,45 +1,47 @@
 import express from "express";
 import cors from "cors";
-import { spawn } from "child_process";
-import path from "path";
-import { fileURLToPath } from "url";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+import { checkFAType } from "./utils/checkFAType.js"; // <-- import your separated logic
+import { generateAutomatonDOT } from "./utils/generateDOT.js"; // <-- import DOT generation logic
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.post("/api/check-fa-type", (req, res) => {
+app.post("/api/check-fa-type", async (req, res) => {
     console.log("Received request:", req.body);
 
-    const cppExecutable = path.join(__dirname, "..", "cpp", "DFAorNFA.exe");
-    const cppProcess = spawn(cppExecutable);
+    try {
+        const result = await checkFAType(req.body);
+        res.json(result);
+    } catch (err) {
+        console.error("Error checking FA type:", err);
+        res.status(500).json({ success: false, error: err.message });
+    }
+});
 
-    cppProcess.stdin.write(JSON.stringify(req.body));
-    cppProcess.stdin.end();
+app.post("/api/generate-automaton-image", async (req, res) => {
+    console.log("Received image generation request:", req.body);
 
-    let output = "";
-    cppProcess.stdout.on("data", (data) => {
-        output += data.toString();
-    });
+    try {
+        const { transitions, start_state, end_states, states, symbols } = req.body;
 
-    cppProcess.stderr.on("data", (data) => {
-        console.error("C++ stderr:", data.toString());
-    });
+        // Generate DOT notation for the automaton
+        const dotString = generateAutomatonDOT({
+            transitions,
+            start_state,
+            end_states,
+            states,
+            symbols
+        });
 
-    cppProcess.on("close", (code) => {
-        console.log("C++ exited with code:", code);
-
-        try {
-            const result = JSON.parse(output);
-            res.json(result);
-        } catch (err) {
-            console.error("Parse error:", err);
-            res.status(500).json({ success: false, error: "Error parsing C++ output" });
-        }
-    });
+        res.json({
+            success: true,
+            dot: dotString
+        });
+    } catch (err) {
+        console.error("Error generating automaton image:", err);
+        res.status(500).json({ success: false, error: err.message });
+    }
 });
 
 app.listen(5000, () => {

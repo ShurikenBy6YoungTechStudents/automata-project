@@ -23,7 +23,7 @@ bool isDFA(const json& transitions, const std::vector<std::string>& symbols) {
 int main() {
     try {
         json input;
-        cout << "Debugging input (This is only for showing that it working properly or not)" <<endl;
+        cout << "DFA" << endl;
         cin >> input;
 
         if (!input.contains("transitions") || !input.contains("symbols")) {
