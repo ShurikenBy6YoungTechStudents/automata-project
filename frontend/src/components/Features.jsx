@@ -1,6 +1,6 @@
 import React from "react";
 import DFAorNFA from "./features/DFAorNFA";
-import VizTest from "./features/VizTest";
+import InputString from "./features/InputString";
 
 const Features = ({ transitions, start_state, end_states, states, symbols }) => {
   return (
@@ -14,10 +14,15 @@ const Features = ({ transitions, start_state, end_states, states, symbols }) => 
           states={states}
           symbols={symbols}
         />
-        <VizTest />
       </div>
-      <div className="p-2 my-2 grid md:grid-cols-2 gap-4">
-        {/* Your other feature buttons here */}
+      <div className="p-2 my-2 grid md:grid-cols-1 gap-4">
+        <InputString
+          transitions={transitions}
+          start_state={start_state}
+          end_states={end_states}
+          states={states}
+          symbols={symbols}
+        />
       </div>
       
       <div className="p-2 my-2 grid md:grid-cols-2 gap-4">
