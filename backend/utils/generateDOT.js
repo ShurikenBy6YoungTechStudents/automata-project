@@ -59,11 +59,17 @@ export function generateAutomatonDOT({ transitions, start_state, end_states, sta
         const [fromState, toState] = transition.split('->');
         const label = symbols.join(', ');
 
+        // Style epsilon transitions differently
+        const isEpsilonTransition = symbols.includes('ɛ');
+        const edgeStyle = isEpsilonTransition ?
+            `[label="${label}", style=dashed, color=blue]` :
+            `[label="${label}"]`;
+
         // Handle self-loops differently for better visualization
         if (fromState === toState) {
-            dot += `  "${fromState}" -> "${toState}" [label="${label}"];\n`;
+            dot += `  "${fromState}" -> "${toState}" ${edgeStyle};\n`;
         } else {
-            dot += `  "${fromState}" -> "${toState}" [label="${label}"];\n`;
+            dot += `  "${fromState}" -> "${toState}" ${edgeStyle};\n`;
         }
     }
 

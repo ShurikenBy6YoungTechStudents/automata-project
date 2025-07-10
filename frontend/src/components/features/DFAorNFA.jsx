@@ -9,15 +9,30 @@ const DFAorNFA = ({ transitions, start_state, end_states, states, symbols }) => 
   const [isGeneratingImage, setIsGeneratingImage] = useState(false);
   const [imageData, setImageData] = useState(null);
   const [imageError, setImageError] = useState(null);
+  const [showImage, setShowImage] = useState(false);
 
   const handleCheck = async () => {
     setIsLoading(true);
     setError(null);
 
     try {
+      // Check if there are any epsilon transitions
+      let hasEpsilonTransitions = false;
+      for (const state in transitions) {
+        if (transitions[state]['ɛ'] && transitions[state]['ɛ'].length > 0) {
+          hasEpsilonTransitions = true;
+          break;
+        }
+      }
+
+      // Only include epsilon in symbols if there are actual epsilon transitions
+      const symbolsToSend = hasEpsilonTransitions ?
+        (symbols.includes('ɛ') ? symbols : [...symbols, 'ɛ']) :
+        symbols.filter(s => s !== 'ɛ');
+
       const response = await axios.post("http://localhost:5000/api/check-fa-type", {
         transitions,
-        symbols,
+        symbols: symbolsToSend,
         start_state,
         end_states,
         states
@@ -86,7 +101,9 @@ const DFAorNFA = ({ transitions, start_state, end_states, states, symbols }) => 
     } finally {
       setIsGeneratingImage(false);
     }
+    
   };
+  
 
   return (
     <div className="border rounded-lg p-4 shadow">

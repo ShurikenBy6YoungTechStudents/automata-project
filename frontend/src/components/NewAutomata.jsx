@@ -33,6 +33,8 @@ export default function NewAutomata() {
             symbols.forEach((symbol) => {
                 newTransitions[state][symbol] = [];
             });
+            // Always include epsilon transitions (empty by default)
+            newTransitions[state]['ɛ'] = [];
         });
         setTransitions(newTransitions);
     }, [states, symbols]);
@@ -62,16 +64,7 @@ export default function NewAutomata() {
         setFinalStates(selectedStates);
     };
 
-    const handleTransitionChange = (state, symbol, value) => {
-        const arr = value.split(",").map(s => s.trim()).filter(Boolean);
-        setTransitions(prev => ({
-            ...prev,
-            [state]: {
-                ...prev[state],
-                [symbol]: arr
-            }
-        }));
-    };
+
         const handleSave = () => {
         const payload = {
             automaton: {
@@ -142,12 +135,15 @@ export default function NewAutomata() {
                 <div>
                     <label className="block mb-1 font-medium">Symbols (comma-separated)</label>
                     <input
-                        placeholder="0,1"
+                        placeholder="0,1 (ɛ will be added automatically)"
                         value={symbolsText}
                         onChange={handleSymbolsChange}
                         type="text"
                         className="w-full p-2 border rounded"
                     />
+                    <p className="text-sm text-gray-600 mt-1">
+                        Note: Epsilon (ɛ) transitions are automatically included for NFA support
+                    </p>
                 </div>
             </div>
 
@@ -180,6 +176,7 @@ export default function NewAutomata() {
                             {symbols.map(sym => (
                                 <th key={sym} className="border p-2">{sym}</th>
                             ))}
+                            <th className="border p-2">ɛ</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -204,16 +201,32 @@ export default function NewAutomata() {
                                         />
                                     </td>
                                 ))}
+                                <td key={`${state}-ɛ`} className="border p-2">
+                                    <MultipleSelection
+                                        options={states}
+                                        initialSelect={transitions[state]?.['ɛ'] || []}
+                                        handleEndStatesChange={(selected) => {
+                                            // Update transitions directly with array
+                                            setTransitions((prev) => ({
+                                                ...prev,
+                                                [state]: {
+                                                    ...prev[state],
+                                                    'ɛ': selected,
+                                                },
+                                            }));
+                                        }}
+                                    />
+                                </td>
                             </tr>
                         ))}
                     </tbody>
                 </table>
-                {/* Debug display */}
+                {/* Debug display
                 <div className="mt-4 p-2 bg-gray-100 rounded">
                     <pre className="text-sm">
                         {JSON.stringify(transitions, null, 2)}
                     </pre>
-                </div>
+                </div> */}
             </div>
             <Features
                 transitions={transitions}
