@@ -1,1 +1,0 @@
-{"start_state":"q0","end_states":["q2"]}
