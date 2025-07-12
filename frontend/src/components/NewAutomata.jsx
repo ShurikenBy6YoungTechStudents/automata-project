@@ -142,7 +142,7 @@ export default function NewAutomata() {
                         className="w-full p-2 border rounded"
                     />
                     <p className="text-sm text-gray-600 mt-1">
-                        Note: Epsilon (ɛ) transitions are automatically included for NFA support
+                        Note: Epsilon (ɛ) column is available for NFA transitions. System automatically detects DFA/NFA type.
                     </p>
                 </div>
             </div>
