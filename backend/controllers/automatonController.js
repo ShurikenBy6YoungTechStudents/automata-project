@@ -2,6 +2,7 @@ import { checkFAType } from "../utils/checkFAType.js";
 import { generateAutomatonDOT } from "../utils/generateDOT.js";
 import { testInputStringWithCpp } from "../utils/InputString.js";
 import { minimizeDFA } from "../utils/DFAMinimizer.js";
+import { convertNFAtoDFA } from "../utils/NFAtoDFA.js";
 
 export const checkFATypeHandler = async (req, res) => {
     try {
@@ -72,6 +73,34 @@ export const minimizeDFAHandler = async (req, res) => {
         res.json(result);
     } catch (err) {
         console.error("Error in minimizeDFAHandler:", err);
+        res.status(500).json({ success: false, error: err.message });
+    }
+};
+
+export const convertNFAtoDFAHandler = async (req, res) => {
+    try {
+        console.log("Received NFA to DFA conversion request:", JSON.stringify(req.body, null, 2));
+
+        // Validate required fields
+        const { transitions, start_state, end_states, symbols, states } = req.body;
+        if (!transitions || !start_state || !end_states || !symbols || !states) {
+            return res.status(400).json({
+                success: false,
+                error: "Missing required fields: transitions, start_state, end_states, symbols, states"
+            });
+        }
+
+        // Validate that it's an NFA first (optional check)
+        const typeResult = await checkFAType(req.body);
+        if (typeResult.success && typeResult.type === "DFA") {
+            console.log("Warning: Converting DFA to DFA (no change expected)");
+        }
+
+        const result = await convertNFAtoDFA(req.body);
+        console.log("NFA to DFA conversion result:", result);
+        res.json(result);
+    } catch (err) {
+        console.error("Error in convertNFAtoDFAHandler:", err);
         res.status(500).json({ success: false, error: err.message });
     }
 };

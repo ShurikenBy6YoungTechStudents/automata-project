@@ -11,7 +11,8 @@
       "intelliSenseMode": "windows-gcc-x64",
       "compilerArgs": [
         ""
-      ]
+      ],
+      "program": "${fileDirname}\\${fileBasenameNoExtension}.exe"
     }
   ],
   "version": 4
