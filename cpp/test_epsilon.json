@@ -1,0 +1,11 @@
+{
+  "states": ["q0", "q1"],
+  "symbols": ["a", "ɛ"],
+  "transitions": {
+    "q0": {
+      "ɛ": ["q1"]
+    }
+  },
+  "start_state": "q0",
+  "end_states": ["q1"]
+}
