@@ -134,7 +134,14 @@ json convertNFAtoDFA(const json& nfaData) {
             }
         }
         
-
+        // Add debugging to check symbols
+        cout << "Original symbols: ";
+        for (const auto& s : symbols) cout << s << " ";
+        cout << endl;
+        cout << "DFA symbols: ";
+        for (const auto& s : dfaSymbols) cout << s << " ";
+        cout << endl;
+        cout << "Epsilon removed: " << (symbols.size() > dfaSymbols.size() ? "Yes" : "No") << endl;
         
         // Data structures for DFA construction
         map<set<string>, DFAState> dfaStates;
