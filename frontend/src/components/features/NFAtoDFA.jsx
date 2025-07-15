@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 const NFAtoDFA = ({ transitions, start_state, end_states, states, symbols }) => {
@@ -8,8 +8,63 @@ const NFAtoDFA = ({ transitions, start_state, end_states, states, symbols }) => 
   const [imageData, setImageData] = useState(null);
   const [imageError, setImageError] = useState(null);
   const [isGeneratingImage, setIsGeneratingImage] = useState(false);
+  const [isDFAWarning, setIsDFAWarning] = useState(false);
+
+  // Function to check if the automaton is a DFA
+  const checkIfDFA = () => {
+    // If no transitions, return false
+    if (!transitions || Object.keys(transitions).length === 0) {
+      return false;
+    }
+
+    // Check for epsilon transitions
+    for (const state in transitions) {
+      if (transitions[state]['ɛ'] && transitions[state]['ɛ'].length > 0) {
+        return false; // Has epsilon transitions, so it's an NFA
+      }
+    }
+
+    // Check for non-deterministic transitions (multiple destinations for a symbol)
+    for (const state in transitions) {
+      for (const symbol of symbols) {
+        if (symbol === 'ɛ') continue; // Skip epsilon
+
+        if (transitions[state][symbol] &&
+            Array.isArray(transitions[state][symbol]) &&
+            transitions[state][symbol].length > 1) {
+          return false; // Multiple transitions for a symbol, so it's an NFA
+        }
+      }
+    }
+
+    // If we got here, it's likely a DFA
+    return true;
+  };
+
+  // Check if input is a DFA whenever transitions or symbols change
+  useEffect(() => {
+    if (transitions && symbols) {
+      const isDFA = checkIfDFA();
+      setIsDFAWarning(isDFA);
+
+      // Clear previous results when DFA is detected
+      if (isDFA) {
+        setResult(null);
+        setImageData(null);
+        setError(null);
+        setImageError(null);
+      }
+    }
+  }, [transitions, symbols]);
+
+
 
   const handleConvert = async () => {
+    // Prevent conversion if input is already a DFA
+    if (isDFAWarning) {
+      return;
+    }
+
     setIsLoading(true);
     setError(null);
     setResult(null);
@@ -131,10 +186,23 @@ const NFAtoDFA = ({ transitions, start_state, end_states, states, symbols }) => 
         </div>
       </div>
 
+      {isDFAWarning && (
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+          <div className="flex items-center">
+            <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+            </svg>
+            <div>
+              <strong>Error:</strong> Can't convert to DFA. The automaton given above is already a DFA.
+            </div>
+          </div>
+        </div>
+      )}
+
       <button
         onClick={handleConvert}
-        disabled={isLoading || !transitions || !start_state || !end_states}
-        className="bg-blue-500 hover:bg-blue-700 disabled:bg-gray-400 text-white font-bold py-2 px-4 rounded mb-4"
+        disabled={isLoading || !transitions || !start_state || !end_states || isDFAWarning}
+        className="bg-[#1a365d] hover:bg-blue-700 disabled:bg-gray-400 text-white font-bold py-2 px-4 rounded mb-4"
       >
         {isLoading ? "Converting..." : "Convert NFA to DFA"}
       </button>
@@ -145,10 +213,10 @@ const NFAtoDFA = ({ transitions, start_state, end_states, states, symbols }) => 
         </div>
       )}
 
-      {result && result.success && (
+      {!isDFAWarning && result && result.success && (
         <div className="mt-6">
           <h3 className="text-lg font-semibold mb-2 text-gray-700">Conversion Result:</h3>
-          
+
           {/* Conversion Info */}
           {result.conversion_info && (
             <div className="bg-blue-50 p-4 rounded border mb-4">
@@ -200,7 +268,7 @@ const NFAtoDFA = ({ transitions, start_state, end_states, states, symbols }) => 
         </div>
       )}
 
-      {result && !result.success && (
+      {!isDFAWarning && result && !result.success && (
         <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mt-4">
           <strong>Conversion Failed:</strong> {result.error}
         </div>

@@ -5,6 +5,7 @@ import MultipleSelection from "./MultipleSeletion";
 import SingleSelection from "./SingleSelection";
 import { ChevronLeftIcon } from "@heroicons/react/20/solid";
 import Features from "./Features";
+import Navbar from "./Navbar";
 
 export default function NewAutomata() {
     const navigate = useNavigate();
@@ -116,156 +117,159 @@ export default function NewAutomata() {
         }
     };
         return (
-        <div className="max-w-6xl mx-auto p-6">
-            <h1 className="text-2xl font-bold mb-4 text-center">Create New Automata</h1>
-            <div className="flex justify-between items-end gap-10">
-                <button
-                    onClick={() => navigate('/')}
-                    className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 w-32 flex items-center justify-center gap-2"
-                >
-                    <div className="flex items-center justify-content-evenly">
-                        <ChevronLeftIcon className="mr-2 w-5 h-6 sm:w-5 text-white" />
-                        <span className="ml-2">Back</span>
+            <div>
+                <Navbar />
+                <div className="max-w-6xl mx-auto p-6">
+                    <h1 className="text-2xl font-bold mb-4 text-center">Create New Automata</h1>
+                    <div className="flex justify-between items-end gap-10">
+                        <button
+                            onClick={() => navigate('/')}
+                            className="bg-[#153e75] text-white px-4 py-2 rounded hover:bg-gray-600 w-32 flex items-center justify-center gap-2"
+                        >
+                            <div className="flex items-center justify-content-evenly">
+                                <ChevronLeftIcon className="mr-2 w-5 h-6 sm:w-5 text-white" />
+                                <span className="ml-2">Back</span>
+                            </div>
+                        </button>
+
+                        <div className="mb-0 w-full">
+                            <label className="block mb-1 font-medium">FA Name</label>
+                            <input
+                            value={faName}
+                            onChange={(e) => setFaName(e.target.value)}
+                            type="text"
+                            placeholder="Automata name"
+                            className="w-full p-2 border rounded"
+                            />
+                        </div>
+
+                        <button
+                            onClick={handleSave}
+                            className="bg-[#1a365d] text-white px-4 py-2 rounded hover:bg-blue-600 w-32"
+                        >
+                            <div className="flex justify-around items-center">
+                                <span>Save</span>
+                            </div>
+                        </button>
                     </div>
-                </button>
 
-                <div className="mb-0 w-full">
-                    <label className="block mb-1 font-medium">FA Name</label>
-                    <input
-                    value={faName}
-                    onChange={(e) => setFaName(e.target.value)}
-                    type="text"
-                    placeholder="Automata name"
-                    className="w-full p-2 border rounded"
-                    />
-                </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 mb-4">
+                        <div>
+                            <label className="block mb-1 font-medium">States (comma-separated)</label>
+                            <input
+                                placeholder="q0,q1,q2"
+                                value={statesText}
+                                onChange={handleStatesChange}
+                                type="text"
+                                className="w-full p-2 border rounded"
+                            />
+                        </div>
 
-                <button
-                    onClick={handleSave}
-                    className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 w-32"
-                >
-                    <div className="flex justify-around items-center">
-                        <span>Save</span>
+                        <div>
+                            <label className="block mb-1 font-medium">Symbols (comma-separated)</label>
+                            <input
+                                placeholder="0,1 (ɛ will be added automatically)"
+                                value={symbolsText}
+                                onChange={handleSymbolsChange}
+                                type="text"
+                                className="w-full p-2 border rounded"
+                            />
+                            <p className="text-sm text-gray-600 mt-1">
+                                Note: Epsilon (ɛ) column is available for NFA transitions. System automatically detects DFA/NFA type.
+                            </p>
+                        </div>
                     </div>
-                </button>
-            </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 mb-4">
-                <div>
-                    <label className="block mb-1 font-medium">States (comma-separated)</label>
-                    <input
-                        placeholder="q0,q1,q2"
-                        value={statesText}
-                        onChange={handleStatesChange}
-                        type="text"
-                        className="w-full p-2 border rounded"
-                    />
-                </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label className="block mb-1 font-medium">Start State</label>
+                            <SingleSelection 
+                                options={states}
+                                handleStartStateChange={handleStartStateChange}
+                                initialState={startState}
+                            />
+                        </div>
 
-                <div>
-                    <label className="block mb-1 font-medium">Symbols (comma-separated)</label>
-                    <input
-                        placeholder="0,1 (ɛ will be added automatically)"
-                        value={symbolsText}
-                        onChange={handleSymbolsChange}
-                        type="text"
-                        className="w-full p-2 border rounded"
-                    />
-                    <p className="text-sm text-gray-600 mt-1">
-                        Note: Epsilon (ɛ) column is available for NFA transitions. System automatically detects DFA/NFA type.
-                    </p>
-                </div>
-            </div>
+                        <div>
+                            <label className="block mb-1 font-medium">Final State</label>
+                            <MultipleSelection
+                                options={states}
+                                handleEndStatesChange={handleFinalStatesChange}
+                                initialSelect={finalStates}
+                            />
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                <div>
-                    <label className="block mb-1 font-medium">Start State</label>
-                    <SingleSelection 
-                        options={states}
-                        handleStartStateChange={handleStartStateChange}
-                        initialState={startState}
-                    />
-                </div>
+                        </div>
+                    </div>
 
-                <div>
-                    <label className="block mb-1 font-medium">Final State</label>
-                    <MultipleSelection
-                        options={states}
-                        handleEndStatesChange={handleFinalStatesChange}
-                        initialSelect={finalStates}
-                    />
-
-                </div>
-            </div>
-
-            <div className="overflow-x-auto mb-4">
-                <table className="min-w-full border">
-                    <thead>
-                        <tr>
-                            <th className="border p-2">State</th>
-                            {symbols.map(sym => (
-                                <th key={sym} className="border p-2">{sym}</th>
-                            ))}
-                            <th className="border p-2">ɛ</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {states.map(state => (
-                            <tr key={state}>
-                                <td className="border p-2">{state}</td>
-                                {symbols.map(symbol => (
-                                    <td key={`${state}-${symbol}`} className="border p-2">
-                                        <MultipleSelection
-                                            options={states}
-                                            initialSelect={transitions[state]?.[symbol] || []}
-                                            handleEndStatesChange={(selected) => {
-                                                // Update transitions directly with array
-                                                setTransitions((prev) => ({
-                                                    ...prev,
-                                                    [state]: {
-                                                        ...prev[state],
-                                                        [symbol]: selected,
-                                                    },
-                                                }));
-                                            }}
-                                        />
-                                    </td>
+                    <div className="overflow-x-auto mb-4">
+                        <table className="min-w-full border">
+                            <thead>
+                                <tr>
+                                    <th className="border p-2">State</th>
+                                    {symbols.map(sym => (
+                                        <th key={sym} className="border p-2">{sym}</th>
+                                    ))}
+                                    <th className="border p-2">ɛ</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {states.map(state => (
+                                    <tr key={state}>
+                                        <td className="border p-2">{state}</td>
+                                        {symbols.map(symbol => (
+                                            <td key={`${state}-${symbol}`} className="border p-2">
+                                                <MultipleSelection
+                                                    options={states}
+                                                    initialSelect={transitions[state]?.[symbol] || []}
+                                                    handleEndStatesChange={(selected) => {
+                                                        // Update transitions directly with array
+                                                        setTransitions((prev) => ({
+                                                            ...prev,
+                                                            [state]: {
+                                                                ...prev[state],
+                                                                [symbol]: selected,
+                                                            },
+                                                        }));
+                                                    }}
+                                                />
+                                            </td>
+                                        ))}
+                                        <td key={`${state}-ɛ`} className="border p-2">
+                                            <MultipleSelection
+                                                options={states}
+                                                initialSelect={transitions[state]?.['ɛ'] || []}
+                                                handleEndStatesChange={(selected) => {
+                                                    // Update transitions directly with array
+                                                    setTransitions((prev) => ({
+                                                        ...prev,
+                                                        [state]: {
+                                                            ...prev[state],
+                                                            'ɛ': selected,
+                                                        },
+                                                    }));
+                                                }}
+                                            />
+                                        </td>
+                                    </tr>
                                 ))}
-                                <td key={`${state}-ɛ`} className="border p-2">
-                                    <MultipleSelection
-                                        options={states}
-                                        initialSelect={transitions[state]?.['ɛ'] || []}
-                                        handleEndStatesChange={(selected) => {
-                                            // Update transitions directly with array
-                                            setTransitions((prev) => ({
-                                                ...prev,
-                                                [state]: {
-                                                    ...prev[state],
-                                                    'ɛ': selected,
-                                                },
-                                            }));
-                                        }}
-                                    />
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-                {/* Debug display
-                <div className="mt-4 p-2 bg-gray-100 rounded">
-                    <pre className="text-sm">
-                        {JSON.stringify(transitions, null, 2)}
-                    </pre>
-                </div> */}
-            </div>
-            <Features
-                transitions={transitions}
-                symbols={symbols}
-                start_state={startState}
-                end_states={finalStates}
-                states={states}
-                fa={fa}
-            />
+                            </tbody>
+                        </table>
+                        {/* Debug display
+                        <div className="mt-4 p-2 bg-gray-100 rounded">
+                            <pre className="text-sm">
+                                {JSON.stringify(transitions, null, 2)}
+                            </pre>
+                        </div> */}
+                    </div>
+                    <Features
+                        transitions={transitions}
+                        symbols={symbols}
+                        start_state={startState}
+                        end_states={finalStates}
+                        states={states}
+                        fa={fa}
+                    />
+                </div>
         </div>
     );
 }
