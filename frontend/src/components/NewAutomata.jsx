@@ -66,25 +66,55 @@ export default function NewAutomata() {
     };
 
 
-        const handleSave = () => {
+    const handleSave = async () => {
+        // Add validation
+        if (!faName.trim()) {
+            alert("Please enter a name for the automaton");
+            return;
+        }
+        
+        if (states.length === 0) {
+            alert("Please add at least one state");
+            return;
+        }
+        
+        if (symbols.length === 0) {
+            alert("Please add at least one symbol");
+            return;
+        }
+        
+        if (!startState) {
+            alert("Please select a start state");
+            return;
+        }
+        
+        if (finalStates.length === 0) {
+            alert("Please select at least one final state");
+            return;
+        }
+
         const payload = {
-            automaton: {
-                states,
-                symbols,
-                transitions,
-                startState,
-                finalStates
-            }
+            name: faName, // Changed from automaton object to individual fields
+            states,
+            symbols,
+            startState,
+            finalStates,
+            transitions
         };
 
-        axios.post("http://localhost:5000/api/save-automaton", payload)
-            .then(res => {
-                console.log("Saved:", res.data);
+        try {
+            const response = await axios.post("http://localhost:5000/api/save-automaton", payload);
+            if (response.data.success) {
+                console.log("Saved:", response.data);
+                alert("Automaton saved successfully!");
                 navigate("/");
-            })
-            .catch(err => {
-                console.error(err);
-            });
+            } else {
+                alert("Failed to save automaton: " + response.data.error);
+            }
+        } catch (err) {
+            console.error("Error saving automaton:", err);
+            alert("Failed to save automaton. Please try again.");
+        }
     };
         return (
             <div>

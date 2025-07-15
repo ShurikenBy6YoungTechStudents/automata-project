@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import automatonRoutes from "./routes/automatonRoutes.js";
+import { initDatabase } from "./database/db.js";
 
 const app = express();
 app.use(cors());
@@ -9,6 +10,13 @@ app.use(express.json());
 // Use routes
 app.use("/api", automatonRoutes);
 
-app.listen(5000, () => {
-    console.log("Server running on port 5000");
+// Initialize database before starting server
+initDatabase().then(() => {
+    app.listen(5000, () => {
+        console.log("Server running on port 5000");
+        console.log("Database initialized successfully");
+    });
+}).catch(err => {
+    console.error("Failed to initialize database:", err);
+    process.exit(1);
 });
