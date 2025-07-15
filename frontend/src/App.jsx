@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import FiniteAutomataList from './components/FiniteAutomataList';
 import NewAutomata from './components/NewAutomata';
+import OurTeam from './components/OurTeam';
 
 export default function App() {
     return (
@@ -9,6 +10,7 @@ export default function App() {
                 <Routes>
                     <Route path="/" element={<FiniteAutomataList />} />
                     <Route path="/new" element={<NewAutomata />} />
+                    <Route path="/team" element={<OurTeam />} />
                 </Routes>
             </Router>
         </div>

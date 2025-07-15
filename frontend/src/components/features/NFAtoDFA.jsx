@@ -202,7 +202,7 @@ const NFAtoDFA = ({ transitions, start_state, end_states, states, symbols }) => 
       <button
         onClick={handleConvert}
         disabled={isLoading || !transitions || !start_state || !end_states || isDFAWarning}
-        className="bg-blue-500 hover:bg-blue-700 disabled:bg-gray-400 text-white font-bold py-2 px-4 rounded mb-4"
+        className="bg-[#1a365d] hover:bg-blue-700 disabled:bg-gray-400 text-white font-bold py-2 px-4 rounded mb-4"
       >
         {isLoading ? "Converting..." : "Convert NFA to DFA"}
       </button>
