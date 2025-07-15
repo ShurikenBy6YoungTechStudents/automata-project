@@ -7,7 +7,7 @@ const __dirname = path.dirname(__filename);
 
 export function convertNFAtoDFA(data) {
     return new Promise((resolve, reject) => {
-        const cppExecutable = path.join(__dirname, "..", "..", "cpp", "NFAtoDFA_clean.exe");
+        const cppExecutable = path.join(__dirname, "..", "..", "cpp", "NFAtoDFA.exe");
         console.log("Executing NFA to DFA conversion:", cppExecutable);
         console.log("Input data:", JSON.stringify(data, null, 2));
 
