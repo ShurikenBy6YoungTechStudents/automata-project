@@ -3,11 +3,11 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import MultipleSelection from "./MultipleSeletion";
 import SingleSelection from "./SingleSelection";
-import { ChevronLeftIcon } from "@heroicons/react/20/solid";
+import { ArrowLeft, Save } from "lucide-react";
 import Features from "./Features";
 import Navbar from "./Navbar";
 
-export default function NewAutomata() {
+const NewAutomata = () => {
     const navigate = useNavigate();
     const [symbolsText, setSymbolsText] = useState("");
     const [symbols, setSymbols] = useState([]);
@@ -24,6 +24,10 @@ export default function NewAutomata() {
         start_state: startState,
         end_states: finalStates,
         transitions: transitions,
+    };
+
+    const handleBack = () => {
+        navigate(-1);
     };
 
     // Update transitions whenever states or symbols change
@@ -117,39 +121,34 @@ export default function NewAutomata() {
         }
     };
         return (
-            <div>
-                <Navbar />
                 <div className="max-w-6xl mx-auto p-6">
                     <h1 className="text-2xl font-bold mb-4 text-center">Create New Automata</h1>
-                    <div className="flex justify-between items-end gap-10">
+                    <div className="flex justify-between items-end gap-10 mb-6">
                         <button
-                            onClick={() => navigate('/')}
-                            className="bg-[#153e75] text-white px-4 py-2 rounded hover:bg-gray-600 w-32 flex items-center justify-center gap-2"
+                            onClick={handleBack}
+                            className="bg-blue-950/95 text-white px-4 py-2 rounded-md flex items-center gap-2 hover:bg-blue-950 transition-colors min-w-[120px] justify-center"
                         >
-                            <div className="flex items-center justify-content-evenly">
-                                <ChevronLeftIcon className="mr-2 w-5 h-6 sm:w-5 text-white" />
-                                <span className="ml-2">Back</span>
-                            </div>
+                            <ArrowLeft size={16} />
+                            <span>Back</span>
                         </button>
 
-                        <div className="mb-0 w-full">
-                            <label className="block mb-1 font-medium">FA Name</label>
+                        <div className="flex-1 mx-4">
+                            <label className="block mb-1 font-medium text-gray-700">FA Name</label>
                             <input
-                            value={faName}
-                            onChange={(e) => setFaName(e.target.value)}
-                            type="text"
-                            placeholder="Automata name"
-                            className="w-full p-2 border rounded"
+                                value={faName}
+                                onChange={(e) => setFaName(e.target.value)}
+                                type="text"
+                                placeholder="Enter automata name"
+                                className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                             />
                         </div>
 
                         <button
                             onClick={handleSave}
-                            className="bg-[#1a365d] text-white px-4 py-2 rounded hover:bg-blue-600 w-32"
+                            className="bg-[#1a365d] text-white px-4 py-2 rounded-md flex items-center gap-2 hover:bg-[#153e75] transition-colors min-w-[120px] justify-center"
                         >
-                            <div className="flex justify-around items-center">
-                                <span>Save</span>
-                            </div>
+                            <Save size={16} />
+                            <span>Save</span>
                         </button>
                     </div>
 
@@ -270,6 +269,7 @@ export default function NewAutomata() {
                         fa={fa}
                     />
                 </div>
-        </div>
     );
 }
+
+export default NewAutomata;

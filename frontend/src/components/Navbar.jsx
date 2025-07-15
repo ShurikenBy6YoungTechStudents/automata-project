@@ -1,16 +1,40 @@
 import React from 'react'
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 const Navbar = () => {
+    const location = useLocation();
+    
     return (
-        <div className='text-white bg-white-400 shadow-md p-5'>
+        <div className='bg-white shadow-md p-5'>
             <div className='max-w-6xl px-6 mx-auto flex w-full justify-between items-center'>
-                <Link to="/">
-                    <img className='w-65 h-full' src="./CADT.png" alt="" />
-                </Link>
-                <Link to="/team">
-                    <h1 className='bg-[#1a365d] text-white px-4 py-2 rounded-md flex items-center gap-2 hover:bg-[#153e75] transition-colors cursor-pointer'>Our Team</h1>
-                </Link>
+                <div className='flex items-center'>
+                    <Link to="/" className='hover:opacity-80 transition-opacity'>
+                        <img className='h-8 w-auto' src="/CADT.png" alt="CADT Logo" />
+                    </Link>
+                </div>
+                
+                <div className='flex items-center gap-4'>
+                    <Link 
+                        to="/"
+                        className={`px-4 py-2 rounded-md transition-colors font-medium ${
+                            location.pathname === '/' 
+                                ? 'bg-[#1a365d] text-white' 
+                                : 'text-gray-700 hover:bg-gray-100'
+                        }`}
+                    >
+                        Home
+                    </Link>
+                    <Link 
+                        to="/team"
+                        className={`px-4 py-2 rounded-md transition-colors font-medium ${
+                            location.pathname === '/team' 
+                                ? 'bg-[#1a365d] text-white' 
+                                : 'text-gray-700 hover:bg-gray-100'
+                        }`}
+                    >
+                        Our Team
+                    </Link>
+                </div>
             </div>
         </div>
     )

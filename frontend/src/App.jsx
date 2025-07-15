@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Navbar from './components/Navbar';
 import FiniteAutomataList from './components/FiniteAutomataList';
 import NewAutomata from './components/NewAutomata';
 import EditAutomata from './components/EditAutomata';
@@ -8,6 +9,7 @@ export default function App() {
     return (
         <div className="min-h-screen bg-gray-50">
             <Router>
+                <Navbar />
                 <Routes>
                     <Route path="/" element={<FiniteAutomataList />} />
                     <Route path="/new" element={<NewAutomata />} />
