@@ -112,7 +112,7 @@ const DFAorNFA = ({ transitions, start_state, end_states, states, symbols }) => 
       <div className="flex gap-2 mb-4">
         <button
           onClick={handleCheck}
-          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 disabled:bg-blue-300"
+          className="bg-[#1a365d] text-white px-4 py-2 rounded hover:bg-blue-600 disabled:bg-blue-300"
           disabled={isLoading}
         >
           {isLoading ? "Checking..." : "Check Type"}
@@ -120,7 +120,7 @@ const DFAorNFA = ({ transitions, start_state, end_states, states, symbols }) => 
 
         <button
           onClick={handleGenerateImage}
-          className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 disabled:bg-green-300"
+          className="bg-[#76BC21] text-white px-4 py-2 rounded hover:bg-green-600 disabled:bg-green-300"
           disabled={isGeneratingImage}
         >
           {isGeneratingImage ? "Generating..." : "Generate Image"}
