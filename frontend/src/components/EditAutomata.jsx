@@ -163,7 +163,7 @@ export default function EditAutomata() {
             <div className="flex justify-between items-end gap-10">
                 <button
                     onClick={() => navigate('/')}
-                    className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 w-32 flex items-center justify-center gap-2"
+                    className="bg-[#1a365d] text-white px-4 py-2 rounded hover:bg-blue-600 w-32 flex items-center justify-center gap-2 hover:scale-105 transition ease-in-out"
                 >
                     <ArrowLeft className="w-4 h-4" />
                     <span>Back</span>
@@ -183,7 +183,7 @@ export default function EditAutomata() {
                 <div className="flex gap-2">
                     <button
                         onClick={handleUpdate}
-                        className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 w-32 flex items-center justify-center gap-2"
+                        className="bg-[#1a365d] text-white px-4 py-2 rounded hover:bg-blue-600 w-32 flex items-center justify-center gap-2 hover:scale-105 transition ease-in-out"
                     >
                         <Save className="w-4 h-4" />
                         <span>Update</span>
@@ -191,7 +191,7 @@ export default function EditAutomata() {
                     
                     <button
                         onClick={handleDelete}
-                        className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 w-32 flex items-center justify-center gap-2"
+                        className="bg-[#FF4438] text-white px-4 py-2 rounded hover:bg-red-600 w-32 flex items-center justify-center gap-2 hover:scale-105 transition ease-in-out"
                     >
                         <Trash2 className="w-4 h-4" />
                         <span>Delete</span>
