@@ -14,6 +14,8 @@ export default function EditAutomata() {
     
     // State variables (same as NewAutomata)
     const [loading, setLoading] = useState(true);
+    const [statesText, setStatesText] = useState("");
+    const [symbolsText, setSymbolsText] = useState("");
     const [faName, setFaName] = useState("");
     const [states, setStates] = useState([]);
     const [symbols, setSymbols] = useState([]);
@@ -34,6 +36,10 @@ export default function EditAutomata() {
                     setStartState(automaton.start_state);
                     setFinalStates(automaton.end_states);
                     setTransitions(automaton.transitions);
+
+                    // Set the text fields for editing
+                    setStatesText(automaton.states.join(','));
+                    setSymbolsText(automaton.symbols.join(','));
                 } else {
                     alert("Failed to load automaton");
                     navigate("/");
@@ -115,12 +121,16 @@ export default function EditAutomata() {
     // Event handlers for updating states and symbols
     const handleStatesChange = (e) => {
         const value = e.target.value;
+        setStatesText(value);
+
         const arr = value.split(",").map(s => s.trim()).filter(Boolean);
         setStates(arr);
     };
 
     const handleSymbolsChange = (e) => {
         const value = e.target.value;
+        setSymbolsText(value);
+
         const arr = value.split(",").map(s => s.trim()).filter(Boolean);
         setSymbols(arr);
     };
@@ -204,7 +214,7 @@ export default function EditAutomata() {
                     <label className="block mb-1 font-medium">States (comma-separated)</label>
                     <input
                         placeholder="q0,q1,q2"
-                        value={states.join(',')}
+                        value={statesText}
                         onChange={handleStatesChange}
                         type="text"
                         className="w-full p-2 border rounded"
@@ -215,7 +225,7 @@ export default function EditAutomata() {
                     <label className="block mb-1 font-medium">Symbols (comma-separated)</label>
                     <input
                         placeholder="0,1 (ɛ will be added automatically)"
-                        value={symbols.join(',')}
+                        value={symbolsText}
                         onChange={handleSymbolsChange}
                         type="text"
                         className="w-full p-2 border rounded"
